@@ -1,6 +1,6 @@
 # HT-Keys Public Repository
 
-本リポジトリでは、_HT-Keys_ の開発者向け情報を公開しています
+本リポジトリでは、_HT-Keys_ のファームウェアと開発者向け情報を公開しています
 
 # HT-Keys とは
 
