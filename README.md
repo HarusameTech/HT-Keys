@@ -4,7 +4,7 @@
 
 # HT-Keys とは
 
-私 Harusame が設計・制作している自作キーボードシリーズです
+私 [Harusame](https://twitter.com/HarusameTech) が設計・制作している自作キーボードシリーズです
 
 site：<https://www.harusame.tech/product/keyboard/HT-Keys/>
 
