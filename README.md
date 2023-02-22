@@ -16,7 +16,7 @@ site：<https://www.harusame.tech/product/keyboard/HT-Keys/>
 
 - US 配列
 - テンキーレス
-- 全 87 キー
+- 87 キー
 - USB Type-C インターフェース採用
 - CherryMX プロファイル
 - RP2040 搭載
