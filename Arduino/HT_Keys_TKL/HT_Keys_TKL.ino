@@ -224,8 +224,8 @@ void readKeyPad(void) {
     digitalWrite(Scan[i],  LOW);                 // 読み取るところだけ落とす:
     delayMicroseconds(2);
     for(uint8_t o = 0; o < sizeof(Read); o++) {  // 読み取って配列を更新:
-      Matrix[i][o] = (Matrix[i][o] << 1) + (digitalRead(Read[o]) ? 0 : 1);
       delayMicroseconds(2);
+      Matrix[i][o] = (Matrix[i][o] << 1) + (digitalRead(Read[o]) ? 0 : 1);
     }
     delayMicroseconds(2);
     digitalWrite(Scan[i], HIGH);                 // 定常状態に戻す:
