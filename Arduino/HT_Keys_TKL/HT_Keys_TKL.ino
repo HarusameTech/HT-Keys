@@ -6,6 +6,7 @@
 
 
 #include <Keyboard.h>
+// #define US_KEYBOARD
 
 // キーマトリクスの処理の有効無効を指定:
 // #define DEBUG_Matrix
@@ -149,7 +150,7 @@
 #define Key_Space       0x20
 #define Key_R_Alt       0x86
 #define Key_R_Win       0x87
-#define Key_App         0x00  // キーコード不明
+#define Key_App         0xED
 #define Key_R_Ctrl      0x84
 #define Key_LT          0xD8
 #define Key_DN          0xD9
