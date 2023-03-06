@@ -83,7 +83,7 @@
 #define Key_PrintScrn   0xCE
 #define Key_ScrollLock  0xCF
 #define Key_Pause       0xD0
-#define Key_Tilde       '~'
+#define Key_Tilde       0x5B
 #define Key_1           0x31
 #define Key_2           0x32
 #define Key_3           0x33
@@ -93,54 +93,54 @@
 #define Key_7           0x37
 #define Key_8           0x38
 #define Key_9           0x39
-#define Key_0           0x3A
-#define Key_Hyphen      '&'
-#define Key_Equal       '_'
+#define Key_0           0x30
+#define Key_Hyphen      0x2D
+#define Key_Equal       0x3B
 #define Key_Backspace   0xB2
 #define Key_Insert      0xD1
 #define Key_Home        0xD2
 #define Key_PageUp      0xD3
 #define Key_Tab         0xB3
-#define Key_Q           'q'
-#define Key_W           'w'
-#define Key_E           'e'
-#define Key_R           'r'
-#define Key_T           't'
-#define Key_Y           'y'
-#define Key_U           'u'
-#define Key_I           'i'
-#define Key_O           'o'
-#define Key_P           'p'
-#define Key_L_bracket   ']'
-#define Key_R_brackets  '\\'
-#define Key_BackSlash   0x5C
+#define Key_Q           0x71
+#define Key_W           0x77
+#define Key_E           0x65
+#define Key_R           0x72
+#define Key_T           0x74
+#define Key_Y           0x79
+#define Key_U           0x75
+#define Key_I           0x69
+#define Key_O           0x6F
+#define Key_P           0x70
+#define Key_L_Bracket   0x5D
+#define Key_R_Bracket   0x5C
+#define Key_BackSlash   0x00  // キーコード不明
 #define Key_Delete      0xD4
 #define Key_End         0xD5
 #define Key_PageDown    0xD6
 #define Key_CapsLock    0xC1
-#define Key_A           'a'
-#define Key_S           's'
-#define Key_D           'd'
-#define Key_F           'f'
-#define Key_G           'g'
-#define Key_H           'h'
-#define Key_J           'j'
-#define Key_K           'k'
-#define Key_L           'l'
-#define Key_SemiColon   ';'
-#define Key_Quote       '"'
+#define Key_A           0x61
+#define Key_S           0x73
+#define Key_D           0x64
+#define Key_F           0x66
+#define Key_G           0x67
+#define Key_H           0x68
+#define Key_J           0x6A
+#define Key_K           0x6B
+#define Key_L           0x6C
+#define Key_SemiColon   0x27
+#define Key_Quote       0x3D
 #define Key_Enter       0xB0
 #define Key_L_Shift     0x81
-#define Key_Z           'z'
-#define Key_X           'x'
-#define Key_C           'c'
-#define Key_V           'v'
-#define Key_B           'b'
-#define Key_N           'n'
-#define Key_M           'm'
-#define Key_camma       ','
-#define Key_period      '.'
-#define Key_slash       '/'
+#define Key_Z           0x7A
+#define Key_X           0x78
+#define Key_C           0x63
+#define Key_V           0x76
+#define Key_B           0x62
+#define Key_N           0x6E
+#define Key_M           0x6D
+#define Key_camma       0x2c
+#define Key_period      0x2E
+#define Key_slash       0x2F
 #define Key_R_Shift     0x85
 #define Key_UP          0xDA
 #define Key_L_Ctrl      0x80
@@ -149,7 +149,7 @@
 #define Key_Space       0x20
 #define Key_R_Alt       0x86
 #define Key_R_Win       0x87
-#define Key_App         0x5D
+#define Key_App         0x00  // キーコード不明
 #define Key_R_Ctrl      0x84
 #define Key_LT          0xD8
 #define Key_DN          0xD9
@@ -161,12 +161,12 @@ const uint8_t Read[] = {Read0, Read1, Read2, Read3, Read4, Read5, Read6, Read7, 
 
 // キーマトリクス操作用配列:
 const uint8_t keyMap[sizeof(Scan)][sizeof(Read)] = {
-  {Key_ESC     , Null     , Key_F1   , Key_F2, Key_F3, Key_F4   , Key_F5, Key_F6, Key_F7   , Key_F8    , Key_F9       , Key_F10      , Key_F11       , Key_F12      , Key_PrintScrn, Key_ScrollLock, Key_Pause   },
-  {Key_Tilde   , Key_1    , Key_2    , Key_3 , Key_4 , Key_5    , Key_6 , Key_7 , Key_8    , Key_9     , Key_0        , Key_Hyphen   , Key_Equal     , Key_Backspace, Key_Insert   , Key_Home      , Key_PageUp  },
-  {Key_Tab     , Key_Q    , Key_W    , Key_E , Key_R , Key_T    , Key_Y , Key_U , Key_I    , Key_O     , Key_P        , Key_L_bracket, Key_R_brackets, Key_BackSlash, Key_Delete   , Key_End       , Key_PageDown},
-  {Key_CapsLock, Key_A    , Key_S    , Key_D , Key_F , Key_G    , Key_H , Key_J , Key_K    , Key_L     , Key_SemiColon, Key_Quote    , Null          , Key_Enter    , Null         , Null          , Null        },
-  {Key_L_Shift , Key_Z    , Key_X    , Key_C , Key_V , Key_B    , Key_N , Key_M , Key_camma, Key_period, Key_slash    , Null         , Null          , Key_R_Shift  , Null         , Key_UP        , Null        },
-  {Key_L_Ctrl  , Key_L_Win, Key_L_Alt, Null  , Null  , Key_Space, Null  , Null  , Null     , Key_R_Alt , Key_R_Win    , Key_App      , Null          , Key_R_Ctrl   , Key_LT       , Key_DN        , Key_RT      }};
+  {Key_ESC     , Null     , Key_F1   , Key_F2, Key_F3, Key_F4   , Key_F5, Key_F6, Key_F7   , Key_F8    , Key_F9       , Key_F10      , Key_F11      , Key_F12      , Key_PrintScrn, Key_ScrollLock, Key_Pause   },
+  {Key_Tilde   , Key_1    , Key_2    , Key_3 , Key_4 , Key_5    , Key_6 , Key_7 , Key_8    , Key_9     , Key_0        , Key_Hyphen   , Key_Equal    , Key_Backspace, Key_Insert   , Key_Home      , Key_PageUp  },
+  {Key_Tab     , Key_Q    , Key_W    , Key_E , Key_R , Key_T    , Key_Y , Key_U , Key_I    , Key_O     , Key_P        , Key_L_Bracket, Key_R_Bracket, Key_BackSlash, Key_Delete   , Key_End       , Key_PageDown},
+  {Key_CapsLock, Key_A    , Key_S    , Key_D , Key_F , Key_G    , Key_H , Key_J , Key_K    , Key_L     , Key_SemiColon, Key_Quote    , Null         , Key_Enter    , Null         , Null          , Null        },
+  {Key_L_Shift , Key_Z    , Key_X    , Key_C , Key_V , Key_B    , Key_N , Key_M , Key_camma, Key_period, Key_slash    , Null         , Null         , Key_R_Shift  , Null         , Key_UP        , Null        },
+  {Key_L_Ctrl  , Key_L_Win, Key_L_Alt, Null  , Null  , Key_Space, Null  , Null  , Null     , Key_R_Alt , Key_R_Win    , Key_App      , Null         , Key_R_Ctrl   , Key_LT       , Key_DN        , Key_RT      }};
 
 // キーマトリクスの状態保存用配列:
 volatile uint8_t Matrix[sizeof(Scan)][sizeof(Read)];
