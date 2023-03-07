@@ -22,3 +22,15 @@ site：<https://www.harusame.tech/product/keyboard/HT-Keys/>
 - RP2040 搭載
 - Raspberry Pi Pico 互換仕様
 - ファームウェアレベルでカスタマイズ可能
+
+## ご使用の際の注意事項
+
+本キーボードは US 配列です。そのため、Windows のキーボード設定を以下のように変更する必要があります
+
+[設定] -> [言語と時刻] -> [言語] -> [優先する言語] の「オプション」から、ハードウェアキーボードレイアウトを変更してください
+
+<div align="center"><img src="https://user-images.githubusercontent.com/95992721/223290590-b2c7e64a-7791-4b0e-9e55-03f8c428e896.png"></div>
+<div align="center">↓</div>
+<div align="center"><img src="https://user-images.githubusercontent.com/95992721/223290757-b25cfca1-7e08-4824-9c6c-0a4f3b5d9bf7.png"></div>
+<div align="center">↓</div>
+<div align="center"><img src="https://user-images.githubusercontent.com/95992721/223290737-ae6536b0-0dc5-4523-9bb1-e338c6b78499.png"></div>
