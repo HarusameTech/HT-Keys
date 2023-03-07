@@ -2,11 +2,13 @@
  * If a compile error occurs,
  * Use "Raspberry Pi Pico/RP2040" by Earle F.Philhower
  * instead of "Arduino Mbed OS RP2040 Boards" by Arduino
+ * 
+ * This code is Version 1.1
  */
 
 
 #include <Keyboard.h>
-// #define US_KEYBOARD
+#define US_KEYBOARD
 
 // キーマトリクスの処理の有効無効を指定:
 // #define DEBUG_Matrix
@@ -84,7 +86,7 @@
 #define Key_PrintScrn   0xCE
 #define Key_ScrollLock  0xCF
 #define Key_Pause       0xD0
-#define Key_Tilde       0x5B
+#define Key_Tilde       0x60
 #define Key_1           0x31
 #define Key_2           0x32
 #define Key_3           0x33
@@ -96,49 +98,49 @@
 #define Key_9           0x39
 #define Key_0           0x30
 #define Key_Hyphen      0x2D
-#define Key_Equal       0x3B
+#define Key_Equal       0x3D
 #define Key_Backspace   0xB2
 #define Key_Insert      0xD1
 #define Key_Home        0xD2
 #define Key_PageUp      0xD3
 #define Key_Tab         0xB3
-#define Key_Q           0x71
-#define Key_W           0x77
-#define Key_E           0x65
-#define Key_R           0x72
-#define Key_T           0x74
-#define Key_Y           0x79
-#define Key_U           0x75
-#define Key_I           0x69
-#define Key_O           0x6F
-#define Key_P           0x70
-#define Key_L_Bracket   0x5D
-#define Key_R_Bracket   0x5C
-#define Key_BackSlash   0x00  // キーコード不明
+#define Key_Q           (0x71 - 0x20)  // 大文字になってしまうのを小文字にするための減算処置。以下同じ:
+#define Key_W           (0x77 - 0x20)
+#define Key_E           (0x65 - 0x20)
+#define Key_R           (0x72 - 0x20)
+#define Key_T           (0x74 - 0x20)
+#define Key_Y           (0x79 - 0x20)
+#define Key_U           (0x75 - 0x20)
+#define Key_I           (0x69 - 0x20)
+#define Key_O           (0x6F - 0x20)
+#define Key_P           (0x70 - 0x20)
+#define Key_L_Bracket   0x5B
+#define Key_R_Bracket   0x5D
+#define Key_BackSlash   0x5C
 #define Key_Delete      0xD4
 #define Key_End         0xD5
 #define Key_PageDown    0xD6
 #define Key_CapsLock    0xC1
-#define Key_A           0x61
-#define Key_S           0x73
-#define Key_D           0x64
-#define Key_F           0x66
-#define Key_G           0x67
-#define Key_H           0x68
-#define Key_J           0x6A
-#define Key_K           0x6B
-#define Key_L           0x6C
-#define Key_SemiColon   0x27
-#define Key_Quote       0x3D
-#define Key_Enter       0xB0
-#define Key_L_Shift     0x81
-#define Key_Z           0x7A
-#define Key_X           0x78
-#define Key_C           0x63
-#define Key_V           0x76
-#define Key_B           0x62
-#define Key_N           0x6E
-#define Key_M           0x6D
+#define Key_A           (0x61 - 0x20)
+#define Key_S           (0x73 - 0x20)
+#define Key_D           (0x64 - 0x20)
+#define Key_F           (0x66 - 0x20)
+#define Key_G           (0x67 - 0x20)
+#define Key_H           (0x68 - 0x20)
+#define Key_J           (0x6A - 0x20)
+#define Key_K           (0x6B - 0x20)
+#define Key_L           (0x6C - 0x20)
+#define Key_SemiColon   0x3B
+#define Key_Quote       0x27
+#define Key_Enter       (0xB0 - 0x20)
+#define Key_L_Shift     (0x81 - 0x20)
+#define Key_Z           (0x7A - 0x20)
+#define Key_X           (0x78 - 0x20)
+#define Key_C           (0x63 - 0x20)
+#define Key_V           (0x76 - 0x20)
+#define Key_B           (0x62 - 0x20)
+#define Key_N           (0x6E - 0x20)
+#define Key_M           (0x6D - 0x20)
 #define Key_camma       0x2c
 #define Key_period      0x2E
 #define Key_slash       0x2F
