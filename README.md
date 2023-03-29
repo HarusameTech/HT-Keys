@@ -23,7 +23,7 @@ site：<https://www.harusame.tech/product/keyboard/HT-Keys/>
 - Raspberry Pi Pico 互換仕様
 - ファームウェアレベルでカスタマイズ可能
 
-## Releases について
+# Releases について
 
 本リポジトリでは、以下のような命名規則を使用しています
 
@@ -35,7 +35,7 @@ site：<https://www.harusame.tech/product/keyboard/HT-Keys/>
 
 ※ファームウェア開発を行うにあたり、何かしらのバグの解消ができたものを `beta` とし、開発時点で見つかっているバグをおおよそ、あるいは全て解消できたものを `Stable` としています
 
-## ご使用の際の注意事項
+# ご使用の際の注意事項
 
 本キーボードは US 配列です。そのため、Windows のキーボード設定を以下のように変更する必要があります
 
