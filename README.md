@@ -23,7 +23,19 @@ site：<https://www.harusame.tech/product/keyboard/HT-Keys/>
 - Raspberry Pi Pico 互換仕様
 - ファームウェアレベルでカスタマイズ可能
 
-## ご使用の際の注意事項
+# Releases について
+
+本リポジトリでは、以下のような命名規則を使用しています
+
+| Releases の名前 | 意味 |
+|:----|:----|
+| `Developer Release` | HT-Keys のデバッグや開発用。主に開発者向け |
+| `User Release - beta` | HT-Keys の開発段階のファームウェア。主に開発者向け |
+| `User Release - Stable` | HT-Keys のファームウェア。使用者向け |
+
+※ファームウェア開発を行うにあたり、何かしらのバグの解消ができたものを `beta` とし、開発時点で見つかっているバグをおおよそ、あるいは全て解消できたものを `Stable` としています
+
+# ご使用の際の注意事項
 
 本キーボードは US 配列です。そのため、Windows のキーボード設定を以下のように変更する必要があります
 
