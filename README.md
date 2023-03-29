@@ -28,6 +28,7 @@ site：<https://www.harusame.tech/product/keyboard/HT-Keys/>
 本リポジトリでは、以下のような命名規則を使用しています
 
 | Releases の名前 | 意味 |
+|:----|:----|
 | `Developer Release` | HT-Keys のデバッグや開発用。主に開発者向け |
 | `User Release - beta` | HT-Keys の開発段階のファームウェア。主に開発者向け |
 | `User Release - Stable` | HT-Keys のファームウェア。使用者向け |
