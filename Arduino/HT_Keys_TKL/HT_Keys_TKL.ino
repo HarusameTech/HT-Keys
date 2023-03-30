@@ -3,7 +3,7 @@
  * Use "Raspberry Pi Pico/RP2040" by Earle F.Philhower
  * instead of "Arduino Mbed OS RP2040 Boards" by Arduino
  * 
- * This code is Version 1.1
+ * This code is Version 1.2
  */
 
 
@@ -35,7 +35,7 @@
 #ifdef DEBUG
  #define delayTime 250000
 #else
- #define delayTime 5000
+ #define delayTime 2500
 #endif
 
 // キー出力モードの指定用:
@@ -104,16 +104,16 @@
 #define Key_Home        0xD2
 #define Key_PageUp      0xD3
 #define Key_Tab         0xB3
-#define Key_Q           (0x71 - 0x20)  // 大文字になってしまうのを小文字にするための減算処置。以下同じ:
-#define Key_W           (0x77 - 0x20)
-#define Key_E           (0x65 - 0x20)
-#define Key_R           (0x72 - 0x20)
-#define Key_T           (0x74 - 0x20)
-#define Key_Y           (0x79 - 0x20)
-#define Key_U           (0x75 - 0x20)
-#define Key_I           (0x69 - 0x20)
-#define Key_O           (0x6F - 0x20)
-#define Key_P           (0x70 - 0x20)
+#define Key_Q           0x51
+#define Key_W           0x57
+#define Key_E           0x45
+#define Key_R           0x52
+#define Key_T           0x54
+#define Key_Y           0x59
+#define Key_U           0x55
+#define Key_I           0x49
+#define Key_O           0x4F
+#define Key_P           0x50
 #define Key_L_Bracket   0x5B
 #define Key_R_Bracket   0x5D
 #define Key_BackSlash   0x5C
@@ -121,30 +121,30 @@
 #define Key_End         0xD5
 #define Key_PageDown    0xD6
 #define Key_CapsLock    0xC1
-#define Key_A           (0x61 - 0x20)
-#define Key_S           (0x73 - 0x20)
-#define Key_D           (0x64 - 0x20)
-#define Key_F           (0x66 - 0x20)
-#define Key_G           (0x67 - 0x20)
-#define Key_H           (0x68 - 0x20)
-#define Key_J           (0x6A - 0x20)
-#define Key_K           (0x6B - 0x20)
-#define Key_L           (0x6C - 0x20)
+#define Key_A           0x41
+#define Key_S           0x53
+#define Key_D           0x44
+#define Key_F           0x46
+#define Key_G           0x47
+#define Key_H           0x48
+#define Key_J           0x4A
+#define Key_K           0x4B
+#define Key_L           0x4C
 #define Key_SemiColon   0x3B
 #define Key_Quote       0x27
-#define Key_Enter       (0xB0 - 0x20)
-#define Key_L_Shift     (0x81 - 0x20)
-#define Key_Z           (0x7A - 0x20)
-#define Key_X           (0x78 - 0x20)
-#define Key_C           (0x63 - 0x20)
-#define Key_V           (0x76 - 0x20)
-#define Key_B           (0x62 - 0x20)
-#define Key_N           (0x6E - 0x20)
-#define Key_M           (0x6D - 0x20)
-#define Key_camma       0x2c
+#define Key_Enter       0xB0
+#define Key_L_Shift     0x85
+#define Key_Z           0x5A
+#define Key_X           0x58
+#define Key_C           0x43
+#define Key_V           0x56
+#define Key_B           0x42
+#define Key_N           0x4E
+#define Key_M           0x4D
+#define Key_camma       0x2C
 #define Key_period      0x2E
 #define Key_slash       0x2F
-#define Key_R_Shift     0x85
+#define Key_R_Shift     0x00
 #define Key_UP          0xDA
 #define Key_L_Ctrl      0x80
 #define Key_L_Win       0x83
@@ -211,9 +211,9 @@ void loop() {
 #ifdef DEBUG_Times
   uint16_t endTime = micros();
   uint8_t diff = endTime - startTime;
-  char buf[30];
-  sprintf(buf, " - Running Time : %2d micro sec.\n\n", diff);
-  Serial.print(buf);
+  char buff[30];
+  sprintf(buff, " - Running Time : %2d micro sec.\n\n", diff);
+  Serial.print(buff);
 #endif
 
   delayMicroseconds(delayTime);  // 読み取り間隔を設定:
@@ -225,12 +225,11 @@ void loop2() {
 void readKeyPad(void) {
   for(uint8_t i = 0; i < sizeof(Scan); i++) {    // スキャン線を順に切り替え:
     digitalWrite(Scan[i],  LOW);                 // 読み取るところだけ落とす:
-    delayMicroseconds(2);
+    delayMicroseconds(8);                        // ゴースト発生防止:
     for(uint8_t o = 0; o < sizeof(Read); o++) {  // 読み取って配列を更新:
-      delayMicroseconds(2);
       Matrix[i][o] = (Matrix[i][o] << 1) + (digitalRead(Read[o]) ? 0 : 1);
+      delayMicroseconds(8);                      // ゴースト発生防止:
     }
-    delayMicroseconds(2);
     digitalWrite(Scan[i], HIGH);                 // 定常状態に戻す:
   }
 
@@ -258,26 +257,32 @@ void checkMatrix(void) {
   // キーボード出力:
   for(uint8_t i = 0; i < sizeof(Scan); i++) {
     for(uint8_t o = 0; o < sizeof(Read); o++) {
-            if((Matrix[i][o] & 0b00000111) == 0b011) {
-        keyOut(keyMap[i][o], MODE_Press);
-      }else if((Matrix[i][o] & 0b00000111) == 0b100) {
+      if((Matrix[i][o] & 0b00001111) == 0b00000011) {
+        if(keyMap[i][o] == Key_M && (((Matrix[0][4] & 0b00001111) == 0b00000011) || ((Matrix[13][4] & 0b00001111) == 0b00000011))) {
+          keyOut('M', MODE_Press);          // M キーが押下され、かつどちらかのシフトキーが押下されている際の処理:
+        }else if(keyMap[i][o] == Key_M && (((Matrix[0][4] & 0b00000011) == 0b00000000) || ((Matrix[13][4] & 0b00000011) == 0b00000000))) {
+          keyOut('m', MODE_Press);          // M キーが押下され、かつどちらのシフトキーも押下されていない際の処理:
+        }else {
+         keyOut(keyMap[i][o], MODE_Press);  // その他のキーが押下された際の処理:
+        }
+      }else if((Matrix[i][o] & 0b00000011) == 0b00000000) {
         keyOut(keyMap[i][o], MODE_Release);
       }
     }
   }
 }
 
-void keyOut(const uint8_t keys, const bool mode) {
+void keyOut(const uint8_t key, const bool mode) {
 #ifndef DISABLE_KEYOUT
-  if(keys == 0) {
+  if(key == 0) {
  #ifdef DEBUG_Matrix
       Serial.print("xxxxxxxx");
  #endif
   }else {
     if(mode) {
-      Keyboard.press(keys);
+      Keyboard.press(key);
     }else {
-      Keyboard.release(keys);
+      Keyboard.release(key);
     }
   }
 #endif
