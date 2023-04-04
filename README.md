@@ -14,13 +14,10 @@ site：<https://www.harusame.tech/product/keyboard/HT-Keys/>
 
 概要
 
-- US 配列
-- テンキーレス
-- 87 キー
+- US 配列テンキーレス（87 キー）
 - USB Type-C インターフェース採用
 - CherryMX プロファイル
-- RP2040 搭載
-- Raspberry Pi Pico 互換仕様
+- RP2040 搭載 Raspberry Pi Pico 互換仕様
 - ファームウェアレベルでカスタマイズ可能
 
 # Releases について
