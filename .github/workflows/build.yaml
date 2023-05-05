@@ -42,5 +42,5 @@ jobs:
           fqbn: ${{ matrix.board.fqbn }}
           platforms: ${{ matrix.board.platforms }}
           sketch-paths: |
-            - ./            
+            - ./Arduino/            
           libraries: '-'
