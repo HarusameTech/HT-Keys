@@ -26,7 +26,10 @@ jobs:
     strategy:
       matrix:
         board:
-          - fqbn: arduino:mbed_rp2040:pico                 
+          - fqbn: rp2040:rp2040:rpipico
+            platforms: |
+              - name: rp2040:rp2040:rpipico
+                source-url: https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json                
     
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
