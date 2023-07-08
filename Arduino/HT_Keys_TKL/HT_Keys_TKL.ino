@@ -133,7 +133,7 @@
 #define Key_SemiColon   0x3B
 #define Key_Quote       0x27
 #define Key_Enter       0xB0
-#define Key_L_Shift     0x81
+#define Key_L_Shift     0x85  // 0x81
 #define Key_Z           0x5A
 #define Key_X           0x58
 #define Key_C           0x43
@@ -144,7 +144,7 @@
 #define Key_camma       0x2C
 #define Key_period      0x2E
 #define Key_slash       0x2F
-#define Key_R_Shift     0x85
+#define Key_R_Shift     0x81  // 0x85
 #define Key_UP          0xDA
 #define Key_L_Ctrl      0x80
 #define Key_L_Win       0x83
