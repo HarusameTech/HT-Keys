@@ -258,16 +258,11 @@ void checkMatrix(void) {
   for(uint8_t i = 0; i < sizeof(Scan); i++) {
     for(uint8_t o = 0; o < sizeof(Read); o++) {
       if((Matrix[i][o] & 0b00001111) == 0b00000011) {
-        if(keyMap[i][o] == Key_M && (((Matrix[0][4] & 0b00001111) == 0b00000011) || ((Matrix[13][4] & 0b00001111) == 0b00000011))) {
-          keyOut('M', MODE_Press);          // M キーが押下され、かつどちらかのシフトキーが押下されている際の処理:
-        }else if(keyMap[i][o] == Key_M && (((Matrix[0][4] & 0b00000011) == 0b00000000) || ((Matrix[13][4] & 0b00000011) == 0b00000000))) {
-          keyOut('m', MODE_Press);          // M キーが押下され、かつどちらのシフトキーも押下されていない際の処理:
-        }else {
-         keyOut(keyMap[i][o], MODE_Press);  // その他のキーが押下された際の処理:
-        }
+        keyOut(keyMap[i][o], MODE_Press);
       }else if((Matrix[i][o] & 0b00000011) == 0b00000000) {
         keyOut(keyMap[i][o], MODE_Release);
       }
+      delayMicroseconds(5);
     }
   }
 }
