@@ -257,7 +257,7 @@ void checkMatrix(void) {
     for(uint8_t o = 0; o < sizeof(Read); o++) {
       if((Matrix[i][o] & 0b00001111) == 0b00000011) {        // キースイッチが押されたことを判断:
         keyOut(keyMap[i][o], MODE_Press);
-      }else if((Matrix[i][o] & 0b00000011) == 0b00000000) {  // キースイッチが離されたことを判断:
+      }else if((Matrix[i][o] & 0b00000111) == 0b00000110) {  // キースイッチが離されたことを判断:
         keyOut(keyMap[i][o], MODE_Release);
       }
       delayMicroseconds(5);
