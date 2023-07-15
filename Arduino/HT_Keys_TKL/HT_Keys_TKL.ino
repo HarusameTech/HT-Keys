@@ -2,8 +2,6 @@
  * If a compile error occurs,
  * Use "Raspberry Pi Pico/RP2040" by Earle F.Philhower
  * instead of "Arduino Mbed OS RP2040 Boards" by Arduino
- * 
- * This code is Version 1.2
  */
 
 
@@ -259,7 +257,7 @@ void checkMatrix(void) {
     for(uint8_t o = 0; o < sizeof(Read); o++) {
       if((Matrix[i][o] & 0b00001111) == 0b00000011) {
         keyOut(keyMap[i][o], MODE_Press);
-      }else if((Matrix[i][o] & 0b00000011) == 0b00000000) {
+      }else if((Matrix[i][o] & 0b00000111) == 0b00000110) {
         keyOut(keyMap[i][o], MODE_Release);
       }
       delayMicroseconds(5);
