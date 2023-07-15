@@ -2,15 +2,6 @@
  * If a compile error occurs,
  * Use "Raspberry Pi Pico/RP2040" by Earle F.Philhower
  * instead of "Arduino Mbed OS RP2040 Boards" by Arduino
- * 
- * This code is Version 1.3.1
- */
-
-
-/* NOTE
- * If a compile error occurs while using a Arduino official Board Manager,
- * Use "Raspberry Pi Pico/RP2040" by Earle F.Philhower
- * instead of "Arduino Mbed OS RP2040 Boards" by Arduino
  */
 
 
@@ -140,7 +131,7 @@
 #define Key_SemiColon   0x3B
 #define Key_Quote       0x27
 #define Key_Enter       0xB0
-#define Key_L_Shift     0x80
+#define Key_L_Shift     0x81
 #define Key_Z           0x5A
 #define Key_X           0x58
 #define Key_C           0x43
@@ -265,18 +256,11 @@ void checkMatrix(void) {
   for(uint8_t i = 0; i < sizeof(Scan); i++) {
     for(uint8_t o = 0; o < sizeof(Read); o++) {
       if((Matrix[i][o] & 0b00001111) == 0b00000011) {        // キースイッチが押されたことを判断:
-        if(keyMap[i][o] == Key_M && (((Matrix[0][4] & 0b00001111) == 0b00000011) || ((Matrix[13][4] & 0b00001111) == 0b00000011))) {
-          keyOut('M', MODE_Press);          // M キーが押下され、かつどちらかのシフトキーが押下されている際の処理:
-        }else if(keyMap[i][o] == Key_M && (((Matrix[0][4] & 0b00000011) == 0b00000000) || ((Matrix[13][4] & 0b00000011) == 0b00000000))) {
-          keyOut('m', MODE_Press);          // M キーが押下され、かつどちらのシフトキーも押下されていない際の処理:
-        }else if(((Matrix[0][4] & 0b00001111) == 0b00000011) || ((Matrix[13][4] & 0b00001111) == 0b00000011)) {
-          keyOut(Key_R_Shift, MODE_Press);  // どちらかのシフトキーが押されている際の処理（暫定でどちらを押してもRシフトを送信）:
-        }else {
-          keyOut(keyMap[i][o], MODE_Press);
-        }
+        keyOut(keyMap[i][o], MODE_Press);
       }else if((Matrix[i][o] & 0b00000011) == 0b00000000) {  // キースイッチが離されたことを判断:
         keyOut(keyMap[i][o], MODE_Release);
       }
+      delayMicroseconds(5);
     }
   }
 }
