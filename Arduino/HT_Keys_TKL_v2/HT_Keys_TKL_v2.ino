@@ -1,35 +1,49 @@
 #include <Keyboard.h>
 #define US_KEYBOARD
 
-/* 読み取り間隔 (microsec) */
-#ifdef DEBUG
- #define delayTime 250000
-#else
- #define delayTime 2500
+// キーマトリクスの処理の有効無効を指定:
+// #define DEBUG_Matrix
+
+// 実行速度モニタリングの有効無効を指定:
+// #define DEBUG_Times
+
+// キー出力を無効にする:
+// #define DISABLE_KEYOUT
+
+#ifdef DEBUG_Times
+#ifndef DEBUG
+#define DEBUG
+#endif
+#endif
+
+#ifdef DEBUG_Matrix
+#ifndef DEBUG
+#define DEBUG
+#endif
 #endif
 
 /* キー出力モードの指定用 */
-#define MODE_Press   true
+#define MODE_Press true
 #define MODE_Release false
 
 /* 使用するGPIOを定義 */
-#define Scan0  25
-#define Scan1  20
-#define Scan2  19
-#define Scan3  18
-#define Scan4  17
-#define Scan5  16
+#define Scan0 25
+#define Scan1 20
+#define Scan2 19
+#define Scan3 18
+#define Scan4 17
+#define Scan5 16
 
-#define Read0  0
-#define Read1  1
-#define Read2  2
-#define Read3  3
-#define Read4  4
-#define Read5  5
-#define Read6  6
-#define Read7  7
-#define Read8  8
-#define Read9  9
+#define Read0 0
+#define Read1 1
+#define Read2 2
+#define Read3 3
+#define Read4 4
+#define Read5 5
+#define Read6 6
+#define Read7 7
+#define Read8 8
+#define Read9 9
 #define Read10 10
 #define Read11 11
 #define Read12 12
@@ -74,16 +88,16 @@
 #define Key_Home        0xD2
 #define Key_PageUp      0xD3
 #define Key_Tab         0xB3
-#define Key_Q           0x51
-#define Key_W           0x57
-#define Key_E           0x45
-#define Key_R           0x52
-#define Key_T           0x54
-#define Key_Y           0x59
-#define Key_U           0x55
-#define Key_I           0x49
-#define Key_O           0x4F
-#define Key_P           0x50
+#define Key_Q           0x71
+#define Key_W           0x77
+#define Key_E           0x65
+#define Key_R           0x72
+#define Key_T           0x74
+#define Key_Y           0x79
+#define Key_U           0x75
+#define Key_I           0x69
+#define Key_O           0x6F
+#define Key_P           0x70
 #define Key_L_Bracket   0x5B
 #define Key_R_Bracket   0x5D
 #define Key_BackSlash   0x5C
@@ -91,26 +105,26 @@
 #define Key_End         0xD5
 #define Key_PageDown    0xD6
 #define Key_CapsLock    0xC1
-#define Key_A           0x41
-#define Key_S           0x53
-#define Key_D           0x44
-#define Key_F           0x46
-#define Key_G           0x47
-#define Key_H           0x48
-#define Key_J           0x4A
-#define Key_K           0x4B
-#define Key_L           0x4C
+#define Key_A           0x61
+#define Key_S           0x73
+#define Key_D           0x64
+#define Key_F           0x66
+#define Key_G           0x67
+#define Key_H           0x68
+#define Key_J           0x6A
+#define Key_K           0x6B
+#define Key_L           0x6C
 #define Key_SemiColon   0x3B
 #define Key_Quote       0x27
 #define Key_Enter       0xB0
 #define Key_L_Shift     0x81
-#define Key_Z           0x5A
-#define Key_X           0x58
-#define Key_C           0x43
-#define Key_V           0x56
-#define Key_B           0x42
-#define Key_N           0x4E
-#define Key_M           0x4D
+#define Key_Z           0x7A
+#define Key_X           0x78
+#define Key_C           0x63
+#define Key_V           0x76
+#define Key_B           0x62
+#define Key_N           0x6E
+#define Key_M           0x6D
 #define Key_camma       0x2C
 #define Key_period      0x2E
 #define Key_slash       0x2F
@@ -129,20 +143,25 @@
 #define Key_RT          0xD7
 
 /* GPIO初期化用配列 */
-const uint8_t Scan[] = {Scan0, Scan1, Scan2, Scan3, Scan4, Scan5};
-const uint8_t Read[] = {Read0, Read1, Read2, Read3, Read4, Read5, Read6, Read7, Read8, Read9, Read10, Read11, Read12, Read13, Read14, Read15, Read16};
+const uint8_t Scan[] = { Scan0, Scan1, Scan2, Scan3, Scan4, Scan5 };
+const uint8_t Read[] = { Read0, Read1, Read2, Read3, Read4, Read5, Read6, Read7, Read8, Read9, Read10, Read11, Read12, Read13, Read14, Read15, Read16 };
 
 /* キーマトリクス操作用配列 */
 const uint8_t keyMap[sizeof(Scan)][sizeof(Read)] = {
-  {Key_ESC     , Null     , Key_F1   , Key_F2, Key_F3, Key_F4   , Key_F5, Key_F6, Key_F7   , Key_F8    , Key_F9       , Key_F10      , Key_F11      , Key_F12      , Key_PrintScrn, Key_ScrollLock, Key_Pause   },
-  {Key_Tilde   , Key_1    , Key_2    , Key_3 , Key_4 , Key_5    , Key_6 , Key_7 , Key_8    , Key_9     , Key_0        , Key_Hyphen   , Key_Equal    , Key_Backspace, Key_Insert   , Key_Home      , Key_PageUp  },
-  {Key_Tab     , Key_Q    , Key_W    , Key_E , Key_R , Key_T    , Key_Y , Key_U , Key_I    , Key_O     , Key_P        , Key_L_Bracket, Key_R_Bracket, Key_BackSlash, Key_Delete   , Key_End       , Key_PageDown},
-  {Key_CapsLock, Key_A    , Key_S    , Key_D , Key_F , Key_G    , Key_H , Key_J , Key_K    , Key_L     , Key_SemiColon, Key_Quote    , Null         , Key_Enter    , Null         , Null          , Null        },
-  {Key_L_Shift , Key_Z    , Key_X    , Key_C , Key_V , Key_B    , Key_N , Key_M , Key_camma, Key_period, Key_slash    , Null         , Null         , Key_R_Shift  , Null         , Key_UP        , Null        },
-  {Key_L_Ctrl  , Key_L_Win, Key_L_Alt, Null  , Null  , Key_Space, Null  , Null  , Null     , Key_R_Alt , Key_R_Win    , Key_App      , Null         , Key_R_Ctrl   , Key_LT       , Key_DN        , Key_RT      }};
+  { Key_ESC, Null, Key_F1, Key_F2, Key_F3, Key_F4, Key_F5, Key_F6, Key_F7, Key_F8, Key_F9, Key_F10, Key_F11, Key_F12, Key_PrintScrn, Key_ScrollLock, Key_Pause },
+  { Key_Tilde, Key_1, Key_2, Key_3, Key_4, Key_5, Key_6, Key_7, Key_8, Key_9, Key_0, Key_Hyphen, Key_Equal, Key_Backspace, Key_Insert, Key_Home, Key_PageUp },
+  { Key_Tab, Key_Q, Key_W, Key_E, Key_R, Key_T, Key_Y, Key_U, Key_I, Key_O, Key_P, Key_L_Bracket, Key_R_Bracket, Key_BackSlash, Key_Delete, Key_End, Key_PageDown },
+  { Key_CapsLock, Key_A, Key_S, Key_D, Key_F, Key_G, Key_H, Key_J, Key_K, Key_L, Key_SemiColon, Key_Quote, Null, Key_Enter, Null, Null, Null },
+  { Key_L_Shift, Key_Z, Key_X, Key_C, Key_V, Key_B, Key_N, Key_M, Key_camma, Key_period, Key_slash, Null, Null, Key_R_Shift, Null, Key_UP, Null },
+  { Key_L_Ctrl, Key_L_Win, Key_L_Alt, Null, Null, Key_Space, Null, Null, Null, Key_R_Alt, Key_R_Win, Key_App, Null, Key_R_Ctrl, Key_LT, Key_DN, Key_RT }
+};
 
 /* キーマトリクスの状態保存用配列 */
 volatile uint8_t Matrix[sizeof(Scan)][sizeof(Read)];
+
+/* マルチコアの動作制御用変数 */
+volatile bool isOK_readKey = true;
+volatile bool isOK_keyOut = false;
 
 void setup() {
 #ifdef DEBUG
@@ -151,12 +170,12 @@ void setup() {
 #endif
 
   // 読み取り線を入力にしてプルアップ:
-  for(uint8_t i = 0; i < sizeof(Read); i++) {
-    pinMode(Read[i],  INPUT_PULLUP);
+  for (uint8_t i = 0; i < sizeof(Read); i++) {
+    pinMode(Read[i], INPUT_PULLUP);
   }
 
   // スキャン線を出力にしてすべてHIGH:
-  for(uint8_t i = 0; i < sizeof(Scan); i++) {
+  for (uint8_t i = 0; i < sizeof(Scan); i++) {
     pinMode(Scan[i], OUTPUT);
     digitalWrite(Scan[i], HIGH);
   }
@@ -170,33 +189,43 @@ void setup1() {
 }
 
 void loop() {
-  readKeyPad();      // キーボードの状態を読み取り、配列を更新する:
+  if (isOK_readKey) {
+    isOK_readKey = false;
+    readKeyPad();  // キーボードの状態を読み取り、配列を更新する:
+    isOK_keyOut = true;
+  }
+
+  delayMicroseconds(2500);
 }
 
 void loop1() {
-  checkMatrix();     // 配列を参照し押されたかどうかを判断:
+  if (isOK_keyOut) {
+    isOK_keyOut = false;
+    checkMatrix();  // 配列を参照し押されたかどうかを判断:
+    isOK_readKey = true;
+  }
 }
 
 void readKeyPad(void) {
-  for(uint8_t i = 0; i < sizeof(Scan); i++) {    // スキャン線を順に切り替え:
-    digitalWrite(Scan[i],  LOW);                 // 読み取るところだけ落とす:
-    delayMicroseconds(8);                        // ゴースト発生防止:
-    for(uint8_t o = 0; o < sizeof(Read); o++) {  // 読み取って配列を更新:
+  for (uint8_t i = 0; i < sizeof(Scan); i++) {    // スキャン線を順に切り替え:
+    digitalWrite(Scan[i], LOW);                   // 読み取るところだけ落とす:
+    delayMicroseconds(8);                         // ゴースト発生防止:
+    for (uint8_t o = 0; o < sizeof(Read); o++) {  // 読み取って配列を更新:
       Matrix[i][o] = (Matrix[i][o] << 1) + (digitalRead(Read[o]) ? 0 : 1);
-      delayMicroseconds(8);                      // ゴースト発生防止:
+      delayMicroseconds(8);  // ゴースト発生防止:
     }
-    digitalWrite(Scan[i], HIGH);                 // 定常状態に戻す:
+    digitalWrite(Scan[i], HIGH);  // 定常状態に戻す:
   }
 
 #ifdef DEBUG_Matrix
   // デバッグ表示:
-  for(uint8_t i = 0; i < sizeof(Scan); i++) {
+  for (uint8_t i = 0; i < sizeof(Scan); i++) {
     Serial.print(" | ");
-    for(uint8_t o = 0; o < sizeof(Read); o++) {
-      for(uint8_t b = 7; b > 0; b--) {
-        if((Matrix[i][o] & 1 << b) == 0) {
+    for (uint8_t o = 0; o < sizeof(Read); o++) {
+      for (uint8_t b = 7; b > 0; b--) {
+        if ((Matrix[i][o] & 1 << b) == 0) {
           Serial.print("0");
-        }else {
+        } else {
           Serial.print("1");
         }
       }
@@ -210,17 +239,11 @@ void readKeyPad(void) {
 
 void checkMatrix(void) {
   // キーボード出力:
-  for(uint8_t i = 0; i < sizeof(Scan); i++) {
-    for(uint8_t o = 0; o < sizeof(Read); o++) {
-      if((Matrix[i][o] & 0b00001111) == 0b00000011) {
-        if(keyMap[i][o] == Key_M && (((Matrix[0][4] & 0b00001111) == 0b00000011) || ((Matrix[13][4] & 0b00001111) == 0b00000011))) {
-          keyOut('M', MODE_Press);          // M キーが押下され、かつどちらかのシフトキーが押下されている際の処理:
-        }else if(keyMap[i][o] == Key_M && (((Matrix[0][4] & 0b00000011) == 0b00000000) || ((Matrix[13][4] & 0b00000011) == 0b00000000))) {
-          keyOut('m', MODE_Press);          // M キーが押下され、かつどちらのシフトキーも押下されていない際の処理:
-        }else {
-         keyOut(keyMap[i][o], MODE_Press);  // その他のキーが押下された際の処理:
-        }
-      }else if((Matrix[i][o] & 0b00000011) == 0b00000000) {
+  for (uint8_t i = 0; i < sizeof(Scan); i++) {
+    for (uint8_t o = 0; o < sizeof(Read); o++) {
+      if ((Matrix[i][o] & 0b00001111) == 0b00000011) {
+        keyOut(keyMap[i][o], MODE_Press);
+      } else if ((Matrix[i][o] & 0b00001111) == 0b00001100) {
         keyOut(keyMap[i][o], MODE_Release);
       }
     }
@@ -229,14 +252,11 @@ void checkMatrix(void) {
 
 void keyOut(const uint8_t key, const bool mode) {
 #ifndef DISABLE_KEYOUT
-  if(key == 0) {
- #ifdef DEBUG_Matrix
-      Serial.print("xxxxxxxx");
- #endif
-  }else {
-    if(mode) {
+  if (key == 0) {
+  } else {
+    if (mode) {
       Keyboard.press(key);
-    }else {
+    } else {
       Keyboard.release(key);
     }
   }
