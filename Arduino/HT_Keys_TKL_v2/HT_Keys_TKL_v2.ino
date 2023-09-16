@@ -284,7 +284,7 @@ void loop() {
     isOK_keyOut = true;
   }
 
-  delayMicroseconds(1000);
+  delayMicroseconds(4000);
 }
 
 void loop1() {
@@ -296,10 +296,10 @@ void loop1() {
 }
 
 void readKeyPad(void) {
-  for(uint8_t i = 0; i < sizeof(Scan); i++) {    // スキャン線を順に切り替え:
+  for(uint8_t i = 0; i < sizeof(Scan); i++) {     // スキャン線を順に切り替え:
     digitalWrite(Scan[i], LOW);                   // 読み取るところだけ落とす:
     delayMicroseconds(8);                         // ゴースト発生防止:
-    for(uint8_t o = 0; o < sizeof(Read); o++) {  // 読み取って配列を更新:
+    for(uint8_t o = 0; o < sizeof(Read); o++) {   // 読み取って配列を更新:
       Matrix[i][o] = (Matrix[i][o] << 1) + (digitalRead(Read[o]) ? 0 : 1);
       delayMicroseconds(8);                       // ゴースト発生防止:
     }
@@ -307,12 +307,12 @@ void readKeyPad(void) {
   }
 
 #ifdef DEBUG_Matrix
-  // デバッグ表示:
+  /* デバッグ表示 */
   for(uint8_t i = 0; i < sizeof(Scan); i++) {
     Serial.print(" | ");
     for(uint8_t o = 0; o < sizeof(Read); o++) {
-      for(uint8_t b = 7; b > 0; b--) {
-        if((Matrix[i][o] & 1 << b) == 0) {
+      for(uint8_t b = 7; b > 0; b--) {            // 配列のデータを MSB から選択:
+        if((Matrix[i][o] & 1 << b) == 0) {        // 配列のデータの対応するビットが 0 かどうかを判定:
           Serial.print("0");
         }else {
           Serial.print("1");
