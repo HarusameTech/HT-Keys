@@ -254,16 +254,16 @@ volatile bool isOK_keyOut  = false;
 
 void setup() {
 #ifdef DEBUG
-  // デバッグ用シリアル通信を115200bpsで開始:
+  /* デバッグ用シリアル通信を115200bpsで開始 */
   Serial.begin(115200);
 #endif
 
-  // 読み取り線を入力にしてプルアップ:
+  /* 読み取り線を入力にしてプルアップ */
   for(uint8_t i = 0; i < sizeof(Read); i++) {
     pinMode(Read[i], INPUT_PULLUP);
   }
 
-  // スキャン線を出力にしてすべてHIGH:
+  /* スキャン線を出力にしてすべてHIGH */
   for(uint8_t i = 0; i < sizeof(Scan); i++) {
     pinMode(Scan[i], OUTPUT);
     digitalWrite(Scan[i], HIGH);
@@ -272,7 +272,7 @@ void setup() {
 
 void setup1() {
 #ifndef DISABLE_KEYOUT
-  // キーボードエミュレート開始:
+  /* キーボードエミュレート開始 */
   Keyboard.begin();
 #endif
 }
@@ -327,7 +327,7 @@ void readKeyPad(void) {
 }
 
 void checkMatrix(void) {
-  // キーボード出力:
+  /* キーボード出力 */
   for(uint8_t i = 0; i < sizeof(Scan); i++) {
     for(uint8_t o = 0; o < sizeof(Read); o++) {
       if((Matrix[i][o] & 0b00001111) == 0b00000011) {
