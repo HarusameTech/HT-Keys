@@ -6,8 +6,10 @@
 
 私 [Harusame](https://twitter.com/HarusameTech) が設計・制作している自作キーボードシリーズです
 
-site：<https://www.harusame.tech/product/keyboard/HT-Keys/>
-購入：<https://harusametech.booth.pm/items/4568322>
+site：<https://www.harusame.tech/product/keyboard/HT-Keys/>  
+購入
+- HT-Keys-TKL
+  - <https://harusametech.booth.pm/items/4568322>
 
 # 製品シリーズ
 
