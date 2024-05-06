@@ -278,9 +278,6 @@ void setup() {
 #endif
 }
 
-void setup1() {
-}
-
 void loop() {
   readKeyPad();  // キーボードの状態を読み取り、配列を更新する:
   checkMatrix();  // 配列を参照し押されたかどうかを判断:
