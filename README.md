@@ -23,6 +23,16 @@ site：<https://www.harusame.tech/product/keyboard/HT-Keys/>
 - RP2040 搭載 Raspberry Pi Pico 互換仕様
 - ファームウェアレベルでカスタマイズ可能
 
+## TK
+
+概要
+
+- 独自配列テンキー
+- USB Type-C インターフェース採用
+- CherryMX プロファイル
+- RP2040 搭載 AE-RP2040 使用
+- ファームウェアレベルでカスタマイズ可能
+
 # Releases について
 
 本リポジトリでは、以下のような命名規則を使用しています
