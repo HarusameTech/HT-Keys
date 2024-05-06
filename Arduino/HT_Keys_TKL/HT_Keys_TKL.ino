@@ -255,10 +255,6 @@ const uint8_t keyMap[sizeof(Scan)][sizeof(Read)] = {
 /* キーマトリクスの状態保存用配列 */
 volatile uint8_t Matrix[sizeof(Scan)][sizeof(Read)];
 
-/* マルチコアの動作制御用変数 */
-volatile bool isOK_readKey =  true;
-volatile bool isOK_keyOut  = false;
-
 void setup() {
 #ifdef DEBUG
   /* デバッグ用シリアル通信を115200bpsで開始 */
@@ -275,31 +271,21 @@ void setup() {
     pinMode(Scan[i], OUTPUT);
     digitalWrite(Scan[i], HIGH);
   }
-}
-
-void setup1() {
+ 
 #ifndef DISABLE_KEYOUT
   /* キーボードエミュレート開始 */
   Keyboard.begin();
 #endif
 }
 
-void loop() {
-  if(isOK_readKey) {
-    isOK_readKey = false;
-    readKeyPad();  // キーボードの状態を読み取り、配列を更新する:
-    isOK_keyOut = true;
-  }
-
-  delayMicroseconds(4000);
+void setup1() {
 }
 
-void loop1() {
-  if(isOK_keyOut) {
-    isOK_keyOut = false;
-    checkMatrix();  // 配列を参照し押されたかどうかを判断:
-    isOK_readKey = true;
-  }
+void loop() {
+  readKeyPad();  // キーボードの状態を読み取り、配列を更新する:
+  checkMatrix();  // 配列を参照し押されたかどうかを判断:
+
+  delayMicroseconds(4000);
 }
 
 void readKeyPad(void) {
