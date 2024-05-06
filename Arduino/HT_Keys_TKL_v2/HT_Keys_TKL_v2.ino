@@ -1,5 +1,8 @@
-#include <Keyboard.h>
-#define US_KEYBOARD
+#include "BleKeyboard.h"
+#include <USBHIDKeyboard.h>
+
+BleKeyboard blekbd;
+USBHIDKeyboard usbkbd;
 
 // キーマトリクスの処理の有効無効を指定:
 // #define DEBUG_Matrix
@@ -27,30 +30,32 @@
 #define MODE_Release false
 
 /* 使用するGPIOを定義 */
-#define Scan0 25
-#define Scan1 20
-#define Scan2 19
-#define Scan3 18
-#define Scan4 17
-#define Scan5 16
+#define Scan0 10
+#define Scan1 11
+#define Scan2 12
+#define Scan3 9
+#define Scan4 46
+#define Scan5 3
 
-#define Read0   0
-#define Read1   1
-#define Read2   2
-#define Read3   3
-#define Read4   4
-#define Read5   5
-#define Read6   6
-#define Read7   7
-#define Read8   8
-#define Read9   9
-#define Read10 10
-#define Read11 11
-#define Read12 12
+#define Read0  42
+#define Read1  41
+#define Read2  40
+#define Read3  39
+#define Read4  38
+#define Read5  37
+#define Read6  36
+#define Read7  35
+#define Read8  45
+#define Read9  48
+#define Read10 47
+#define Read11 21
+#define Read12 14
 #define Read13 13
-#define Read14 21
-#define Read15 23
-#define Read16 24
+#define Read14  8
+#define Read15  2
+#define Read16  1
+
+#define MODE_SELECT
 
 /* 各キースイッチとそれに割り当てるキーの対応を定義 */
 #define SW1  Key_ESC
@@ -248,10 +253,6 @@ const uint8_t keyMap[sizeof(Scan)][sizeof(Read)] = {
 /* キーマトリクスの状態保存用配列 */
 volatile uint8_t Matrix[sizeof(Scan)][sizeof(Read)];
 
-/* マルチコアの動作制御用変数 */
-volatile bool isOK_readKey =  true;
-volatile bool isOK_keyOut  = false;
-
 void setup() {
 #ifdef DEBUG
   /* デバッグ用シリアル通信を115200bpsで開始 */
@@ -268,31 +269,22 @@ void setup() {
     pinMode(Scan[i], OUTPUT);
     digitalWrite(Scan[i], HIGH);
   }
-}
 
-void setup1() {
+  /* BLE / USB HID 切り替えスイッチ用入力 */
+  pinMode(MODE_SELECT,  INPUT_PULLUP);
+ 
 #ifndef DISABLE_KEYOUT
   /* キーボードエミュレート開始 */
-  Keyboard.begin();
+  usbkbd.begin();
+  blekbd.begin();
 #endif
 }
 
 void loop() {
-  if(isOK_readKey) {
-    isOK_readKey = false;
-    readKeyPad();  // キーボードの状態を読み取り、配列を更新する:
-    isOK_keyOut = true;
-  }
+  readKeyPad();  // キーボードの状態を読み取り、配列を更新する:
+  checkMatrix();  // 配列を参照し押されたかどうかを判断:
 
   delayMicroseconds(4000);
-}
-
-void loop1() {
-  if(isOK_keyOut) {
-    isOK_keyOut = false;
-    checkMatrix();  // 配列を参照し押されたかどうかを判断:
-    isOK_readKey = true;
-  }
 }
 
 void readKeyPad(void) {
@@ -344,9 +336,17 @@ void keyOut(const uint8_t key, const bool mode) {
   if(key == 0) {
   }else {
     if(mode) {
-      Keyboard.press(key);
+      if(digitalRead(MODE_SELECT) == HIGH) {
+        usbkbd.press(key);
+      }else {
+        blekbd.press(key);
+      }
     }else {
-      Keyboard.release(key);
+      if(digitalRead(MODE_SELECT) == HIGH) {
+        usbkbd.release(key);
+      }else {
+        blekbd.release(key);
+      }
     }
   }
 #endif
