@@ -56,6 +56,7 @@ USBHIDKeyboard usbkbd;
 #define Read16  1
 
 #define MODE_SELECT
+#define STATUS_LED
 
 /* 各キースイッチとそれに割り当てるキーの対応を定義 */
 #define SW1  Key_ESC
@@ -272,6 +273,7 @@ void setup() {
 
   /* BLE / USB HID 切り替えスイッチ用入力 */
   pinMode(MODE_SELECT,  INPUT_PULLUP);
+  pinMOde(STATUS_LED , OUTPUT);
  
 #ifndef DISABLE_KEYOUT
   /* キーボードエミュレート開始 */
@@ -283,6 +285,7 @@ void setup() {
 void loop() {
   readKeyPad();  // キーボードの状態を読み取り、配列を更新する:
   checkMatrix();  // 配列を参照し押されたかどうかを判断:
+  digitalWrite(STATUS_LED, digitalRead(MODE_SELECT));
 
   delayMicroseconds(4000);
 }
