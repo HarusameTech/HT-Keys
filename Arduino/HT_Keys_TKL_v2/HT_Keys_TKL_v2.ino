@@ -55,8 +55,8 @@ USBHIDKeyboard usbkbd;
 #define Read15  2
 #define Read16  1
 
-#define MODE_SELECT
-#define STATUS_LED
+#define MODE_SELECT  4
+#define STATUS_LED   5
 
 /* 各キースイッチとそれに割り当てるキーの対応を定義 */
 #define SW1  Key_ESC
