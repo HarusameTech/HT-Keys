@@ -1,5 +1,7 @@
 #include "BleKeyboard.h"
-#include <USBHIDKeyboard.h>
+#include "USB.h"
+#include "USBHIDKeyboard.h"
+#include <FastLED.h>
 
 BleKeyboard blekbd;
 USBHIDKeyboard usbkbd;
@@ -12,6 +14,9 @@ USBHIDKeyboard usbkbd;
 
 // キー出力を無効にする:
 // #define DISABLE_KEYOUT
+
+// LED を無効にする
+#define DISABLE_LED
 
 #ifdef DEBUG_Times
  #ifndef DEBUG
@@ -57,6 +62,7 @@ USBHIDKeyboard usbkbd;
 
 #define MODE_SELECT  4
 #define STATUS_LED   5
+#define LED_OUTPUT   6
 
 /* 各キースイッチとそれに割り当てるキーの対応を定義 */
 #define SW1  Key_ESC
@@ -140,7 +146,6 @@ USBHIDKeyboard usbkbd;
 #define SW79 Key_L_Alt
 #define SW80 Key_Space
 #define SW81 Key_R_Alt
-#define SW82 Key_R_Win
 #define SW83 Key_App
 #define SW84 Key_R_Ctrl
 #define SW85 Key_LT
@@ -238,6 +243,9 @@ USBHIDKeyboard usbkbd;
 #define Key_DN          0xD9
 #define Key_RT          0xD7
 
+#define LED_COUNT   1
+#define BLIGHTNESS 25
+
 /* GPIO初期化用配列 */
 const uint8_t Scan[] = {Scan0, Scan1, Scan2, Scan3, Scan4, Scan5 };
 const uint8_t Read[] = {Read0, Read1, Read2, Read3, Read4, Read5, Read6, Read7, Read8, Read9, Read10, Read11, Read12, Read13, Read14, Read15, Read16};
@@ -249,10 +257,14 @@ const uint8_t keyMap[sizeof(Scan)][sizeof(Read)] = {
   {SW34, SW35, SW36, SW37, SW38, SW39, SW40, SW41, SW42, SW43, SW44, SW45, SW46, SW47, SW48, SW49, SW50},
   {SW51, SW52, SW53, SW54, SW55, SW56, SW57, SW58, SW59, SW60, SW61, SW62, Null, SW63, Null, Null, Null},
   {SW64, SW65, SW66, SW67, SW68, SW69, SW70, SW71, SW72, SW73, SW74, Null, Null, SW75, Null, SW76, Null},
-  {SW77, SW78, SW79, Null, Null, SW80, Null, Null, Null, SW81, SW82, SW83, Null, SW84, SW85, SW86, SW87}};
+  {SW77, SW78, SW79, Null, Null, SW80, Null, Null, Null, SW81, NULL, SW83, Null, SW84, SW85, SW86, SW87}};
 
 /* キーマトリクスの状態保存用配列 */
 volatile uint8_t Matrix[sizeof(Scan)][sizeof(Read)];
+
+#ifndef DISABLE_LED
+  CRGB LED[LED_COUNT];
+#endif
 
 void setup() {
 #ifdef DEBUG
@@ -261,24 +273,33 @@ void setup() {
 #endif
 
   /* 読み取り線を入力にしてプルアップ */
-  for(uint8_t i = 0; i < sizeof(Read); i++) {
+  for(size_t i = 0; i < sizeof(Read); i++) {
     pinMode(Read[i], INPUT_PULLUP);
   }
 
   /* スキャン線を出力にしてすべてHIGH */
-  for(uint8_t i = 0; i < sizeof(Scan); i++) {
+  for(size_t i = 0; i < sizeof(Scan); i++) {
     pinMode(Scan[i], OUTPUT);
     digitalWrite(Scan[i], HIGH);
   }
 
   /* BLE / USB HID 切り替えスイッチ用入力 */
   pinMode(MODE_SELECT,  INPUT_PULLUP);
-  pinMOde(STATUS_LED , OUTPUT);
- 
+  pinMode(STATUS_LED , OUTPUT);
+
+#ifndef DISABLE_LED
+  /* ARGB LED の開始 */
+  pinMode(LED_OUTPUT, OUTPUT);
+  FastLED.addLeds<SK6812, LED_OUTPUT, GRB>(LED, LED_COUNT);//.setCorrection(TypicalLEDStrip);
+  FastLED.setBrightness(BLIGHTNESS);
+  LED_control(1);
+#endif
+
 #ifndef DISABLE_KEYOUT
   /* キーボードエミュレート開始 */
   usbkbd.begin();
   blekbd.begin();
+  USB.begin();
 #endif
 }
 
@@ -287,7 +308,7 @@ void loop() {
   checkMatrix();  // 配列を参照し押されたかどうかを判断:
   digitalWrite(STATUS_LED, digitalRead(MODE_SELECT));
 
-  delayMicroseconds(4000);
+  delayMicroseconds(1000000 / 1000);
 }
 
 void readKeyPad(void) {
@@ -332,6 +353,45 @@ void checkMatrix(void) {
       }
     }
   }
+
+#ifndef DISABLE_LED
+  static uint8_t LED_mode = 0;
+
+  if((keyMap[5][10] & 0b00001111) == 0b1111) {
+    if((keyMap[1][10] & 0b00001111) == 0b0011) {
+      LED_mode = 0;
+    }
+    if((keyMap[1][9] & 0b00001111) == 0b0011) {
+      LED_mode = 9;
+    }
+    if((keyMap[1][8] & 0b00001111) == 0b0011) {
+      LED_mode = 8;
+    }
+    if((keyMap[1][7] & 0b00001111) == 0b0011) {
+      LED_mode = 7;
+    }
+    if((keyMap[1][6] & 0b00001111) == 0b0011) {
+      LED_mode = 6;
+    }
+    if((keyMap[1][5] & 0b00001111) == 0b0011) {
+      LED_mode = 5;
+    }
+    if((keyMap[1][4] & 0b00001111) == 0b0011) {
+      LED_mode = 4;
+    }
+    if((keyMap[1][3] & 0b00001111) == 0b0011) {
+      LED_mode = 3;
+    }
+    if((keyMap[1][2] & 0b00001111) == 0b0011) {
+      LED_mode = 2;
+    }
+    if((keyMap[1][1] & 0b00001111) == 0b0011) {
+      LED_mode = 1;
+    }
+  }
+
+  LED_control(LED_mode);
+#endif
 }
 
 void keyOut(const uint8_t key, const bool mode) {
@@ -354,3 +414,48 @@ void keyOut(const uint8_t key, const bool mode) {
   }
 #endif
 }
+
+#ifndef DISABLE_LED
+void LED_control(uint8_t mode) {
+  FastLED.clearData();
+  switch(mode) {
+    case 0:
+      for(uint8_t i = 0; i < LED_COUNT; i++) {
+        LED[i] = CRGB::White;
+      }
+      FastLED.show();
+      break;
+
+    case 1:
+      for(uint8_t i = 0; i < LED_COUNT; i++) {
+        LED[i] = CRGB::Yellow;
+      }
+      FastLED.show();
+      break;
+
+    case 2:
+      for(uint8_t i = 0; i < LED_COUNT; i++) {
+        LED[i] = CRGB::Blue;
+      }
+      FastLED.show();
+      break;
+
+    case 3:
+      for(uint8_t i = 0; i < LED_COUNT; i++) {
+        LED[i] = CRGB::Green;
+      }
+      FastLED.show();
+      break;
+
+    case 4:
+      for(uint8_t i = 0; i < LED_COUNT; i++) {
+        LED[i] = CRGB::Red;
+      }
+      FastLED.show();
+      break;
+
+    default:
+      break;
+  }
+}
+#endif

@@ -102,7 +102,7 @@ BleKeyboard::BleKeyboard(std::string deviceName, std::string deviceManufacturer,
 
 void BleKeyboard::begin(void)
 {
-  BLEDevice::init(deviceName);
+  BLEDevice::init("HT-Keys-TKL v2");
   BLEServer* pServer = BLEDevice::createServer();
   pServer->setCallbacks(this);
 
@@ -113,7 +113,7 @@ void BleKeyboard::begin(void)
 
   outputKeyboard->setCallbacks(this);
 
-  hid->manufacturer()->setValue(deviceManufacturer);
+  hid->manufacturer()->setValue("HarusameTech");
 
   hid->pnp(0x02, 0xe502, 0xa111, 0x0210);
   hid->hidInfo(0x00, 0x01);
